@@ -11,6 +11,8 @@ toacct=ARGS[5]
 srccontents,srctransactions=parseledgerfile(srcledger)
 dstcontents,dsttransactions=parseledgerfile(dstledger)
 
+newtransactions=Transaction[]
+
 for t in values(srctransactions)
     if (length(t.text)>0)&&(length(t.text[1])>0)&&(t.text[1][1]=='#')
         if strip(t.text[1][2:end])==match
@@ -19,11 +21,17 @@ for t in values(srctransactions)
                         "    $(fromacct)",
                         "    $(toacct)    $(t.amount)",
                         ""]
-                push!(dstcontents,t)
+                push!(newtransactions,t)
                 dsttransactions[t.id]=t
             end
         end
     end
+end
+
+sort!(newtransactions,by=t->t.date)
+
+for t in newtransactions
+    push!(dstcontents,t)
 end
 
 writeledgerfile(dstledger,dstcontents)
