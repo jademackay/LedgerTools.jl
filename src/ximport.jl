@@ -18,7 +18,7 @@ function tostring(t::Transaction)
     return r
 end
 
-function tostring(s::String)
+function tostring(s::Union{String,SubString{String}})
     return s*"\n"
 end
 
