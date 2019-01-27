@@ -85,14 +85,14 @@ function importasb(newtransactions,fname)
 end
 
 function importofx(newtransactions,fname)
-    s=open(readstring,fname)
+    s=read(fname,String)
     while true
-        i=searchindex(s,"<STMTTRN>")
+        i=first(something(findfirst("<STMTTRN>", s), 0:-1))
         if i==0
             break
         end
         s=s[i+9:end]
-        i=searchindex(s,"</STMTTRN>")
+        i=first(something(findfirst("</STMTTRN>", s), 0:-1))
         s1=s[1:i-1]
         s=s[i:end]
         d=Dict{String,String}()
@@ -124,18 +124,18 @@ ledgerfile=nothing
 newtransactions=Transaction[]
 
 while length(ARGS)>0
-    x=shift!(ARGS)
+    x=popfirst!(ARGS)
     if x[1]=='-'
         if x=="-asb"
-            importasb(newtransactions,shift!(ARGS))
+            importasb(newtransactions,popfirst!(ARGS))
         elseif x=="-ofx"
-            importofx(newtransactions,shift!(ARGS))
+            importofx(newtransactions,popfirst!(ARGS))
         else
             error("Unknown option: ",x)
         end
     else
         if ledgerfile==nothing
-            ledgerfile=x
+            global ledgerfile=x
         else
             error("Can't operate on more than one ledger file.")
         end

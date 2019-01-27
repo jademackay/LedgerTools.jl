@@ -2,7 +2,7 @@ module Ximport
 
 export Transaction,tostring,parseledgerfile,writeledgerfile
 
-type Transaction
+struct Transaction
     id::String
     date::String
     amount::String
