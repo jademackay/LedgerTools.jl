@@ -31,7 +31,7 @@ function parseledgerfile(fname)
     function noneleft()
         while length(ls)>0
             if (length(ls[1])>0)&&(ls[1][1]==';')
-                shift!(ls)
+                popfirst!(ls)
             else
                 return false
             end
@@ -43,7 +43,7 @@ function parseledgerfile(fname)
     if noneleft()
         @goto DONE
     end
-    l=shift!(ls)
+    l=popfirst!(ls)
     if length(l)>0
         if l[1]==';'
             l=l[2:end]
@@ -66,14 +66,14 @@ function parseledgerfile(fname)
     end
     if length(ls[1])>0
         if ls[1][1] in "0123456789"
-            push!(text,shift!(ls))
+            push!(text,popfirst!(ls))
             @goto TRANSACTIONTEXT2
         end
         if ls[1][1] in "|"
             @goto TRANSACTIONDONE
         end
     end
-    push!(text,shift!(ls))
+    push!(text,popfirst!(ls))
     @goto TRANSACTIONTEXT
 
     @label TRANSACTIONTEXT2
@@ -85,7 +85,7 @@ function parseledgerfile(fname)
             @goto TRANSACTIONDONE
         end
     end
-    push!(text,shift!(ls))
+    push!(text,popfirst!(ls))
     @goto TRANSACTIONTEXT2
     
     @label TRANSACTIONDONE
