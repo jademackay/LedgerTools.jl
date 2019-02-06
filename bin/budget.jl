@@ -182,7 +182,7 @@ for x in map(strip,open(readlines,cmd))
     end
     amount=parse(Float64,s[6][2:end-1])
     if dt<SHEETS[1][1]
-        openingamount=openingamount+amount
+        global openingamount=openingamount+amount
     else
         if !haskey(CODE2CATEGORY,code)
             println("Warning, don't know what category to use for code: $code")
